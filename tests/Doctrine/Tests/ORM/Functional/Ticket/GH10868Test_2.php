@@ -42,16 +42,18 @@ class GH10868Test_2 extends OrmFunctionalTestCase
         $this->_em->flush();
         $this->_em->clear();
 
-        $order->orderProducts->count();
+        $order = $this->_em->getRepository(GH10868Order::class)->find($order->id);
+
+        $orderProductFromOrder = $order->orderProducts->first();
+
+        $orderProductOffer = $orderProductFromOrder->productOffer;
 
         $reference = $this->_em->getReference(GH10868Offer::class, [
             'shop' => $shop->id,
             'id' => $offer->id,
         ]);
 
-        $orderProductFromOrder = $order->orderProducts->first();
-
-        self::assertSame($reference, $orderProductFromOrder->productOffer);
+        self::assertSame($reference, $orderProductOffer);
     }
 }
 
