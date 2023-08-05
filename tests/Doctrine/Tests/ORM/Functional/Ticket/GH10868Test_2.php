@@ -50,7 +50,7 @@ class GH10868Test_2 extends OrmFunctionalTestCase
 
         $reference = $this->_em->getReference(GH10868Offer::class, [
             'shop' => $shop->id,
-            'id' => $offer->id,
+            'id' => (string) $offer->id,
         ]);
 
         self::assertSame($reference, $orderProductOffer);
@@ -131,8 +131,6 @@ class GH10868Offer
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="bigint")
-     *
-     * @var ?int
      */
     public $id;
 
@@ -178,4 +176,15 @@ class GH10868Shop
      * @var ?int
      */
     public $id;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    protected $name = 'Test';
+
+    public function __toString()
+    {
+        return ! empty($this->name) ? $this->name : $this->id;
+    }
 }
